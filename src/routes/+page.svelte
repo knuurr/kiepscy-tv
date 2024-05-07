@@ -11,7 +11,7 @@
   import ProgressBar from "./ProgressBar.svelte";
 
 
-  type State = "loading" | "loaded" | "convert.ready" | "covert.start" | "convert.error" | "convert.done";
+  type State = "loading" | "loaded" | "convert.ready" | "convert.start" | "convert.error" | "convert.done";
 
   let files;
   let videoData;
@@ -67,7 +67,7 @@
   }
 
   async function convertVideo() {
-    state = "covert.start";
+    state = "convert.start";
     // const videData = await readFile(files[0]);
     const { name } = files[0];
     await ffmpeg.writeFile(name, await fetchFile(files[0]));
@@ -166,11 +166,13 @@
   data-state={state}
   class="drop box"
   >
-  <h3>Wrzuć wideło</h3>
+  <!-- <h3>Wrzuć wideło</h3> -->
   {#if state === "loading"}
+    <h3>Wrzuć wideło</h3>
     <p in:fade>Ładuję ffmpeg...</p>
   {:else if state === "loaded"}
     <!-- <p in:fade class="box">Drop a video file here</p> -->
+    <h3>Wrzuć wideło</h3>
     <p in:fade>
       Dropnij wideło albo kliknij by "załonczyć"
       </p>
@@ -184,11 +186,13 @@
     {:else}
     <button class="custom-file-upload" style="background-color: orange;" on:click={convertVideo} >Okiłizuj</button>
     {/if}
-  {:else if state === "covert.start"}
+  {:else if state === "convert.start"}
     <h2>
       Kliknij by anulować
     </h2>
-  {:else if state === "covert.done"}
+    <button>Anuluj (niedizala)</button>
+  {:else if state === "convert.done"}
+    <h3>Wrzuć wideło</h3>
     <p in:fade>
       Dropnij wideło albo kliknij by "załonczyć"
       </p>
@@ -197,6 +201,7 @@
       <input in:fade type="file" id="file-upload" accept="video/*" bind:files>
       Przeglądaj...
     </label>
+    <button class="custom-file-upload" style="background-color: orange;" on:click={convertVideo} >Okiłizuj</button>
   {/if}
 
 
@@ -204,7 +209,7 @@
 
 <div class="box" id="preview">
   <h3 in:fade>Podgląd</h3>
-  {#if state === "covert.start"}
+  {#if state === "convert.start"}
   <!-- Add proggress bar -->
   <!-- <ProgressBar progress={progress}></ProgressBar> -->
   <!-- <div class="progress" style:--progress={$progress}> -->
