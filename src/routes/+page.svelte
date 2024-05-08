@@ -10,8 +10,10 @@
   // import Video from './Video.svelte';
   // import ProgressBar from "./ProgressBar.svelte";
   import DashedBox from "./DashedBox.svelte";
+  import * as DATA from './Constans.svelte'; // Import all from data.js
 
   import { Container, Input, Button, Col, Row } from '@sveltestrap/sveltestrap';
+  
 
 
   type State = "loading" | "loaded" | "convert.ready" | "convert.start" | "convert.error" | "convert.done";
@@ -123,12 +125,12 @@
     await ffmpeg.writeFile(name, await fetchFile(files[0]));
     // await ffmpeg.writeFile("input.webm", videData);
     // await ffmpeg.exec(["-i", "input.webm", "output.mp4"]);
-    await ffmpeg.writeFile("greenscreen.png", await fetchFile("src/routes/greenscreen.png"));
+    await ffmpeg.writeFile(DATA.NAME_GREENSCREEN_PNG, await fetchFile(DATA.PATH_GREENSCREEN_PNG));
     transformState = "1/2"
-    await ffmpeg.exec(['-i', 'greenscreen.png' ,'-i', name, '-filter_complex', "[1:v]scale=w='min(iw,510)':h='min(ih,382)':force_original_aspect_ratio=decrease,pad=512:382:((512-iw)/2)+1:((382-ih)/2)+1:color=black[overlay];[0:v][overlay]overlay=x=140:y=94", '-c:v', 'libx264', '-c:a',  'copy', '-preset', 'ultrafast', 'output_temp.mp4']);
-    await ffmpeg.writeFile("video.mp4", await fetchFile("src/routes/video.mp4"));
+    await ffmpeg.exec(['-i', DATA.NAME_GREENSCREEN_PNG ,'-i', name, '-filter_complex', "[1:v]scale=w='min(iw,510)':h='min(ih,382)':force_original_aspect_ratio=decrease,pad=512:382:((512-iw)/2)+1:((382-ih)/2)+1:color=black[overlay];[0:v][overlay]overlay=x=140:y=94", '-c:v', 'libx264', '-c:a',  'copy', '-preset', 'ultrafast', 'output_temp.mp4']);
+    await ffmpeg.writeFile(DATA.NAME_TEMPLATE_VIDEO, await fetchFile(DATA.PATH_TEMPLATE_VIDEO));
     transformState = "2/2"
-    await ffmpeg.exec(['-i', 'output_temp.mp4' ,'-i', 'video.mp4', '-filter_complex', "[1:v]scale=768:576 [scaledv]; [0:v][0:a][scaledv][1:a]concat=n=2:v=1:a=1[v][a]", '-map', '[v]', '-map',  '[a]', '-preset', 'ultrafast', 'output.mp4']);
+    await ffmpeg.exec(['-i', DATA.NAME_TEMP_OUTPUT ,'-i', DATA.NAME_TEMPLATE_VIDEO, '-filter_complex', "[1:v]scale=768:576 [scaledv]; [0:v][0:a][scaledv][1:a]concat=n=2:v=1:a=1[v][a]", '-map', '[v]', '-map',  '[a]', '-preset', 'ultrafast', 'output.mp4']);
     // const data = await fetchFile("output.mp4");
     const data = await ffmpeg.readFile('output.mp4');
 
