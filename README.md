@@ -7,7 +7,11 @@ Inspired by Polish popular sitcom "Świat Według Kiepskich", you can put any yo
 Here's an example output of what you can expect, when using your video. For this example I used well-known movie [Big Buck Bunny](https://en.wikipedia.org/wiki/Big_Buck_Bunny).
 
 
+https://github.com/knuurr/kiepscy-tv/assets/135069967/700ad5d5-4a7f-4f3a-8f78-10bb1349f685
 
+---
+
+# Building
 
 Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
 
